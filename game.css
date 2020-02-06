@@ -59,3 +59,9 @@
   background-color: #fdba21;
   width: 0%;
 }
+
+@media only screen and (max-width: 767px) {
+  #question {
+    font-size: 3.2rem;
+  }
+}

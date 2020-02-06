@@ -3,6 +3,8 @@ const choices = Array.from(document.getElementsByClassName("choice-text"));
 const progressText = document.getElementById("progressText");
 const scoreText = document.getElementById("score");
 const progressBarFull = document.getElementById("progressBarFull");
+const loader = document.getElementById("loader");
+const game = document.getElementById("game");
 
 let currentQuestion = {};
 let acceptingAnswers = false;
@@ -10,63 +12,24 @@ let score = 0;
 let questionCounter = 0;
 let availableQuestions = [];
 
-let questions = [
-  {
-    question:
-      "Kobe was drafted right out of high school in 1996 by what NBA team?",
-    choice1: "Charlotte Hornets",
-    choice2: "Los Angeles Lakers",
-    choice3: "Los Angeles Clippers",
-    choice4: "Boston Celtics",
-    answer: 1
-  },
-  {
-    question: "What high school did Kobe Bryant play for?",
-    choice1: "Crenshaw",
-    choice2: "Carver",
-    choice3: "Lower Merion",
-    choice4: "Hawthorne",
-    answer: 3
-  },
-  {
-    question: "Where was Kobe Bryant born?",
-    choice1: "Los Angeles",
-    choice2: "Italy",
-    choice3: "Houston",
-    choice4: "Philadelphia",
-    answer: 4
-  },
-  {
-    question: "What year did Kobe win an MVP (Most Valuable Player) trophy?",
-    choice1: "2006",
-    choice2: "2007",
-    choice3: "2008",
-    choice4: "2009",
-    answer: 3
-  },
-  {
-    question:
-      "Kobe Bryant ended his 20 year career scoring 60 points against what team?",
-    choice1: "San Antonio Spurs",
-    choice2: "Utah Jazz",
-    choice3: "Sacramento Kings",
-    choice4: "Boston Celtics",
-    answer: 2
-  },
-  {
-    question:
-      "How many points was Kobe's team winning or losing by at halftime during his famous 81 point performance?",
-    choice1: "Winning by 8",
-    choice2: "Losing by 14",
-    choice3: "Winning by 12",
-    choice4: "Losing by 5",
-    answer: 2
-  }
-];
+let questions = [];
+
+fetch("questions.json")
+  .then(res => {
+    return res.json();
+  })
+  .then(loadedQuestions => {
+    console.log(loadedQuestions);
+    questions = loadedQuestions;
+    startGame();
+  })
+  .catch(err => {
+    console.error(err);
+  });
 
 // CONSTANTS
 const CORRECT_BONUS = 10;
-const MAX_QUESTIONS = 6;
+const MAX_QUESTIONS = 10;
 
 startGame = () => {
   questionCounter = 0;
@@ -121,7 +84,7 @@ choices.forEach(choice => {
       selectedChoice.parentElement.classList.remove(classToApply);
 
       getNewQuestion();
-    }, 1000);
+    }, 500);
   });
 });
 
@@ -129,5 +92,3 @@ incrementScore = num => {
   score += num;
   scoreText.innerText = score;
 };
-
-startGame();
